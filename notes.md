@@ -57,4 +57,19 @@ Essentially it just shows how different phrases are connected.
 It's defined using the "phrase structure rules"
 If needed, it can be done using the "Stanford Parser"
 
-### Dependency Parsing
+
+## Word2Vec
+
+- For a term-document matrix, you'd map the document to the words used and the count of the occurances of the words
+- For a word-word matrix, or a word-context matrix you look at the words surrounding the main word
+rather than the whole document. You take into account some "contexts". 
+- A word is now defined as a vector of the counts over the context words.
+- If you look at a word-word matrix, it's absolutely massive, sometimes 50,000 x 50,000 because of the size of the language
+- this makes a very sparse matrix
+- If **the size of the windows is SMALL, it's syntactic**
+- if **the size of the windows is LARGE, it's semantic**
+
+- There are 2 kinds of co-occurences between words (This is info)[https://cd1.edb.hkedcity.net/cd/eng/vocab09/ch1_3-2.htm]
+	- FirstOrder: (Syntagmatic association): Refer to word combinations, "play football", "go shopping" etc.
+	- SecondOrder: (Paradigmatic Association): Words are grouped together, things like 'piano, guitar, violin, drums' are all instruments and so are grouped as such
+
