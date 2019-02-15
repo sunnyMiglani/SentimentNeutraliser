@@ -73,3 +73,15 @@ rather than the whole document. You take into account some "contexts".
 	- FirstOrder: (Syntagmatic association): Refer to word combinations, "play football", "go shopping" etc.
 	- SecondOrder: (Paradigmatic Association): Words are grouped together, things like 'piano, guitar, violin, drums' are all instruments and so are grouped as such
 
+### Pointwise Mutual Information:
+
+- Pointwise mutual information is the measure of whether a context word is _particularly informative_ about the target word
+- Pointwise mutual information measures whether events `x` and `y` co-occur more than if they were independent
+- Calculated by taking the Log(base2) of (P(x,y)/P(x)P(y))
+
+### Measuring similarity of words
+
+- Given 2 words, `v` and `w`.
+- We need to measure their similarity
+- Since they're vectors, go after their _dot product_
+- 
