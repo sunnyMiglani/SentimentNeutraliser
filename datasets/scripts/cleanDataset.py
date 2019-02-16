@@ -21,9 +21,25 @@ def stemWords(tweet):
     tweetAsString = " ".join(str(word) for word in stemmedWords)
     return tweetAsString
 
+def expandWords(tweet):
+    # Taken from https://stackoverflow.com/questions/43018030/replace-apostrophe-short-words-in-python/47091370#47091370
+    phrase = re.sub(r"won\'t", "will not", phrase)
+    phrase = re.sub(r"can\'t", "can not", phrase)
+    phrase = re.sub(r"n\'t", " not", phrase)
+    phrase = re.sub(r"\'re", " are", phrase)
+    phrase = re.sub(r"\'s", " is", phrase)
+    phrase = re.sub(r"\'d", " would", phrase)
+    phrase = re.sub(r"\'ll", " will", phrase)
+    phrase = re.sub(r"\'t", " not", phrase)
+    phrase = re.sub(r"\'ve", " have", phrase)
+    phrase = re.sub(r"\'m", " am", phrase)
+    phrase = re.sub(r"i\'ll", "i will", phrase)
+    return phrase
+
 def dataClean(tweet):
     tweet = removeTwitterData(tweet)
-    tweet = stemWords(tweet)
+    # tweet = stemWords(tweet)
+    decontracted = expandWords(tweet)
     
     return tweet
 
@@ -32,7 +48,7 @@ nlp = spacy.load('en')
 
 print("Starting the cleaning!")
 
-with open('twitterDataset.csv', newline='',encoding="ISO-8859-1") as csvfile:
+with open('../twitterDataset.csv', newline='',encoding="ISO-8859-1") as csvfile:
     tweetReader = csv.reader(csvfile)
     listOfTweets = (list(tweetReader))
     print("Size of dataset: {0}".format(len(listOfTweets)))
@@ -46,4 +62,4 @@ for i in range(0,10):
 print("--- Done! ---")
 df = pd.DataFrame(cleanTweets)
 
-df.to_csv('cleanedTweets.csv')
+df.to_csv('../cleanedTweets.csv', index = False)
