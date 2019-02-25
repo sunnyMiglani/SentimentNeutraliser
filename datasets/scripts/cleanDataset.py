@@ -1,4 +1,3 @@
-import spacy
 import pandas as pd
 import csv
 import re
@@ -11,6 +10,7 @@ def removeTwitterData(tweet):
     tweet = tweet.lower()
     tweet = re.sub(r'^@\S+','', tweet)
     tweet = re.sub(r'https?\S+','', tweet)
+    tweet = re.sub(r'www[\.\w/~]+\S', '', tweet)
     tweet = tweet.replace("\"", '').replace(',','')
 
     return tweet
@@ -21,7 +21,7 @@ def stemWords(tweet):
     tweetAsString = " ".join(str(word) for word in stemmedWords)
     return tweetAsString
 
-def expandWords(tweet):
+def expandWords(phrase):
     # Taken from https://stackoverflow.com/questions/43018030/replace-apostrophe-short-words-in-python/47091370#47091370
     phrase = re.sub(r"won\'t", "will not", phrase)
     phrase = re.sub(r"can\'t", "can not", phrase)
@@ -44,7 +44,6 @@ def dataClean(tweet):
     return tweet
 
 
-nlp = spacy.load('en')
 
 print("Starting the cleaning!")
 
