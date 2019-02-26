@@ -3,3 +3,4 @@ test_code/
 datasets/
 *_remote/
 thesis/
+/.ipynb_checkpoints/*
