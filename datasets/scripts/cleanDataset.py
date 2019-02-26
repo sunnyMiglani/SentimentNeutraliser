@@ -8,10 +8,10 @@ ps = PorterStemmer()
 
 def removeTwitterData(tweet):
     tweet = tweet.lower()
-    tweet = re.sub(r'^@\S+','', tweet)
-    tweet = re.sub(r'https?\S+','', tweet)
-    tweet = re.sub(r'www[\.\w/~]+\S', '', tweet)
-    tweet = tweet.replace("\"", '').replace(',','')
+    tweet = re.sub(r'^@\S+','', tweet) # Remove any twitter mentions from the data
+    tweet = re.sub(r'https?\S+','', tweet) # remove any https links
+    tweet = re.sub(r'www[\.\w/~]+\S', '', tweet) # remove links that start with www.<name>\~\ .. etc
+    tweet = tweet.replace("\"", '').replace(',','') # Replace double quotes, which may mess with text analysis.
 
     return tweet
 
