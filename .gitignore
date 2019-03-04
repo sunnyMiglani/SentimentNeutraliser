@@ -4,3 +4,4 @@ datasets/
 *_remote/
 thesis/
 /.ipynb_checkpoints/*
+ignored/
