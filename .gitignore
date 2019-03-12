@@ -1,7 +1,8 @@
 latex_test/
 test_code/
 datasets/
-*_remote/
+bc3_remote/
 thesis/
-/.ipynb_checkpoints/*
+*/.ipynb_checkpoints/*
 ignored/
+*/__pycache__*

@@ -1,0 +1,30 @@
+'''
+    Logic:
+    Send in a string, this string is the start
+    Each new strign is appended to the end.
+    
+    1) Where to start?
+    - Start at the end, because that acts as the base case
+    - Build backwards.
+    - Ex : <any recalls> and <all recalls>
+    - This is then sent with the previous key, so it becomes 
+        - <cases about this ...> + <any recalls>
+        - <cases about this ...> + <all recalls>
+    - The problem here is trying to return X amount of strings, where X is the number of options for pos i and pos i-1 (i starting from the left)
+    - We can do something like taking an array [str1, str2 ... strX] from each backward iteration
+    - Generate new sentences [nStr1, nStr2, ...nStrX] per Str from the options we have
+    - this would generate a new list [nStr11, nStr12, nStr13, nStr21, nStr22 ... nStrYX]
+    - This would be passed back and built on
+    - Final list would consist of all possible iterations.    
+    
+    So steps are:
+    1. Take the list of sentences available
+    2. Look at my options
+    3. Append my options to the _front_ of those lists
+    4. Return the list.
+    
+    - Needed: 
+    a. the sentences available
+    b. my current options
+    '''    
+    
