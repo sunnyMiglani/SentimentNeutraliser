@@ -31,6 +31,7 @@ class Sentence:
         self.indexToSetOfWords = {}
         self.alternateSentences = [];
         self.finalShiftSentences = [];
+        self.replacementsExist = False;
 
     def addAlternativesByIndex(self, index, listOfAlternatives):
         '''
@@ -49,8 +50,6 @@ class Sentence:
             self.alternateSentences.append(strings)
         else:
             self.alternateSentences.extend(strings)
-    
-
     
     def addFinalSentences(self, sentences):
         if(isinstance(sentences, str)):
