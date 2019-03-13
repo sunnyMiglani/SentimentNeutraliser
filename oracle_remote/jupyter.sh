@@ -1,5 +1,5 @@
 hostname -I
 
-sleep 2
+sleep 1
 
 jupyter notebook --no-browser --port=8082

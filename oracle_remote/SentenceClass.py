@@ -1,3 +1,5 @@
+import copy
+
 class SentenceWithHTML():
     
     def __init__(self,sentence,html):
@@ -15,7 +17,10 @@ class SentenceWithHTML():
     
     def setSentence(self, sentence):
         self.sentence = sentence
-
+    
+    def __str__(self):
+        return "sentence : {0}".format(self.sentence)
+        
 
 class Sentence:
     
@@ -56,6 +61,11 @@ class Sentence:
     def resetFinalSentences(self):
         self.finalShiftSentences = [];
         
+    def getFinalSentences(self):
+        return self.finalShiftSentences[:];
+    
+    def getDictOfIndexWords(self):
+        return copy.copy(dict(self.indexToSetOfWords))
             
 if(__name__ == "__main__"):
 	print("Running class file as main!");

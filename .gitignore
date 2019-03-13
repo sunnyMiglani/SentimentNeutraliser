@@ -6,4 +6,5 @@ thesis/
 */.ipynb_checkpoints/*
 ignored/
 */__pycache__*
-
+*.vscode/*
+*/.vscode/*
