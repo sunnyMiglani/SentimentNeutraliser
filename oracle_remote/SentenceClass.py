@@ -21,6 +21,27 @@ class SentenceWithHTML():
     def __str__(self):
         return "sentence : {0}".format(self.sentence)
         
+class SentenceWithSentiment():
+    
+    def __init__(self,sentence,sentiment, html="No HTML"):
+        self.sentence = sentence;
+        self.sentiment = sentiment;
+        self.html = html;
+      
+    def getSentence(self):
+        return self.sentence;
+    
+    def getSentiment(self):
+        return self.sentiment;
+    
+    def getHTML(self):
+        return self.html;
+    
+    def __str__(self):
+        if(self.html == "No HTML"):
+            return "{0} : {1}".format(self.sentence, self.sentiment)
+        else:
+            return "{0} : {1}".format(self.html, self.sentiment)
 
 class Sentence:
     
@@ -29,7 +50,6 @@ class Sentence:
         self.ogSentence = sentence;
         self.ogSentiment = sentiment;
         self.indexToSetOfWords = {}
-        self.alternateSentences = [];
         self.finalShiftSentences = [];
         self.replacementsExist = False;
 
@@ -43,13 +63,7 @@ class Sentence:
             self.indexToSetOfWords[index] = self.indexToSetOfWords.union(set(listOfAlternatives))
         else:
             self.indexToSetOfWords[index] = set(listOfAlternatives)
-        
-    def addAlternativeStrings(self, strings):
-        if(isinstance(strings,str)):
-            self.alternateStrings = list(set(self.alternateStrings.append(strings)))
-            self.alternateSentences.append(strings)
-        else:
-            self.alternateSentences.extend(strings)
+    
     
     def addFinalSentences(self, sentences):
         if(isinstance(sentences, str)):
