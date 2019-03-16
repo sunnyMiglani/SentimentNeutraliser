@@ -10,6 +10,7 @@ punctuation = r"\"#$%&'()+-/:;<=>?[\]^_`{|}~"
 def tokenize_words(tweet):
     tweet = removeTwitterData(tweet)
     splitTweet = tweet.split(' ')
+    print(splitTweet)
     return splitTweet
 
 def removeTwitterData(tweet):
@@ -56,30 +57,46 @@ def dataClean(tweet):
     
     return tweet
 
+# def __main__():
+  #  print("")
+
 def interaction():
+    print("Welcome to cleaning dataset script! ");
     print("Would you like to enter a string or clean dataset?")
-    print("Press 1. for string, 2. for dataset")
+    print("Press 1. for string, 2. for dataset or 3 for nothing!")
     inp = input()
     if("1" in inp):
         tstString = input()
         newString = dataClean(tstString)
         print(newString)
+    elif("3" in inp):
+        print("Bye");
     else:
         print("Starting the cleaning!")
-        with open('../twitterDataset.csv', newline='',encoding="ISO-8859-1") as csvfile:
+       	print("What is the name of the input file?");
+	inputName = input()
+	inputName = "../{0}.csv".format(inputName);
+	with open(inputName, newline='',encoding="ISO-8859-1") as csvfile:
             tweetReader = csv.reader(csvfile)
             listOfTweets = (list(tweetReader))
             print("Size of dataset: {0}".format(len(listOfTweets)))
             listOfTweets = [tweet[5] for tweet in listOfTweets]
             
-        print(" Going to map the dataCleaning function over the tweets!");
-        cleanTweets = list(map(dataClean, listOfTweets))
-        for i in range(0,10):
-            print("{0} : {1} \n".format(listOfTweets[i], cleanTweets[i]))
+            print(" Going to map the dataCleaning function over the tweets!");
+            cleanTweets = list(map(dataClean, listOfTweets))
+            for i in range(0,10):
+                print("{0} : {1} \n".format(listOfTweets[i], cleanTweets[i]))
 
-        print("--- Done! ---")
-        df = pd.DataFrame(cleanTweets)
+            print("--- Done! ---")
+            df = pd.DataFrame(cleanTweets);
 
-        df.to_csv('../cleanedTweets.csv', index = False)
+            print("What do i output the file as?")
+            outputName = input();
+            outputName = "../{0}.csv".format(outputName); 	
+            df.to_csv(outputName, index = False)
 
-interaction()
+if __name__ == " __main__":
+	print("Running clean dataset py!");
+	interaction() 
+else:
+	print("Imported clean dataset!"); 
