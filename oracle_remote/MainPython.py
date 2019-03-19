@@ -16,7 +16,9 @@ import string
 import nltk
 import sys
 import spacy
-    
+import pickle
+import os
+
 from flask import Flask
 from IPython.display import HTML
 from nltk.corpus import wordnet 
@@ -64,13 +66,15 @@ if("no" in tstString.lower() or "n" in tstString.lower()):
     print(" didnt reload model! ")
 else:
     print("loading the model!");
-    if(RUN_AS_MAIN):
-        print("Loading gigaword-100")
-        word_vectors = api.load("glove-wiki-gigaword-100")
-    else:
-        print("Loading gigaword-300")
-        word_vectors = api.load("glove-wiki-gigaword-300")
 
+    print("Loading gigaword-300")
+    if(os.path.exists("../datasets/word_vectors-300.pickle")):
+        print("loading via pickle!")
+        pickle_in = open("../datasets/word_vectors-300.pickle", "rb")
+        word_vectors = pickle.load(pickle_in);
+    else:
+        print("loaded without pickle")
+        word_vectors = api.load("glove-wiki-gigaword-300")
     nltk.download('vader_lexicon')
     nltk.download('punkt')
     nltk.download('averaged_perceptron_tagger')
@@ -544,8 +548,7 @@ def runThroughTweets():
         sentenceObj = returnCombinationsOfStrings(sentenceObj)
         sentencesWithSentiment = printStrings(sentenceObj)
         getAllHTML = getHTMLPage()
-
-
+	
         dict_sentimentToStringObjects = createDictionaryOfSentStrings(sentencesWithSentiment)
         
         sentiments = sorted(dict_sentimentToStringObjects.keys())
@@ -588,7 +591,8 @@ def specificString(textString=""):
     dict_sentimentToStringObjects = createDictionaryOfSentStrings(allPossibleSentences)    
 
     sentiments = sorted(dict_sentimentToStringObjects.keys())
-    interactionWithUser(sentenceObj, dict_sentimentToStringObjects, sentiments[0:10], True);
+    interactionWithUser(sentenceObj, dict_sentimentToStringObjects, sentiments[0:10], False);
+    return  allPossibleSentences
 
 
 if (RUN_AS_MAIN):
@@ -604,14 +608,17 @@ def routerViewAll():
 def routerViewTweets(start, number):
     global TWEET_START
     global NUM_OF_TWEETS 
+
     TWEET_START = start
     NUM_OF_TWEETS = number
     
     numOfTweets = runThroughTweets()
+    return numOfTweets
 
 @app.route('/user/<string:userString>')
 def userStringTest(userString):
-    specificString(userString)
+	allPossible =  specificString(userString)
+	return allPossible
 
 @app.route('/test')
 def userInteract():
