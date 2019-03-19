@@ -19,7 +19,8 @@ import spacy
 import pickle
 import os
 
-from flask import Flask
+from flask import Flask, render_template
+from flask_cors import CORS
 from IPython.display import HTML
 from nltk.corpus import wordnet 
 from sklearn.manifold import TSNE
@@ -35,7 +36,8 @@ pathToDataScripts = '../datasets/scripts/'
 filePath = '../datasets/GoogleNews-vectors-negative300.bin'
 
 sys.path.insert(0, pathToDataScripts)
-app = Flask(__name__)
+app = Flask(__name__, template_folder="website_resources/")
+CORS(app)
 
 from cleanDataset import tokenize_words, dataClean
 
@@ -74,7 +76,8 @@ else:
         word_vectors = pickle.load(pickle_in);
     else:
         print("loaded without pickle")
-        word_vectors = api.load("glove-wiki-gigaword-300")
+        print("-- LOADING GIGAWORD-100 TO SAVE TIME --")
+        word_vectors = api.load("glove-wiki-gigaword-100")
     nltk.download('vader_lexicon')
     nltk.download('punkt')
     nltk.download('averaged_perceptron_tagger')
@@ -177,6 +180,8 @@ def printStrings(sentenceObj):
     if (bestSentimentString != ""): displayText("Best Sentence: {0} : {1}".format(bestSentimentString, bestSentiment), color='green') 
     
     
+    sentenceObj.resetFinalSentences();
+    sentenceObj.addFinalSentences(listOfSentencesWithSentiments)
     return listOfSentencesWithSentiments;
 
 
@@ -185,6 +190,8 @@ def getHTMLPage():
     bigPage = ''
     bigPage += ' <ul>'
     for html in RETURN_HTML_REPLACEMENT:
+        if("Tweet: " in html):
+            bigPage += "</ul>  <br/> <ul> "
         bigPage += "<li> {0} </li>".format(html);
     bigPage += '</ul>'
     return bigPage
@@ -292,14 +299,6 @@ def generateHTMLObjectsFromSentence(sentenceObj):
     
     return listOfSentenceObjs
     
-    
-    
-
-
-# ## Sentence Chunking and Appending
-
-# In[21]:
-
 
 def helper_combine(mainList, myList):
     '''
@@ -308,7 +307,7 @@ def helper_combine(mainList, myList):
     newList = []
     for val in myList:
         for mainVal in mainList:
-#             if(VERBOSE_PRINTING): print("Combining {0} with {1}".format(' '.join(val), ' '.join(mainVal)));
+            # if(VERBOSE_PRINTING): print("Combining {0} with {1}".format(' '.join(val), ' '.join(mainVal)));
             newList.append(val + mainVal);
     return newList;
 
@@ -547,8 +546,7 @@ def runThroughTweets():
 
         sentenceObj = returnCombinationsOfStrings(sentenceObj)
         sentencesWithSentiment = printStrings(sentenceObj)
-        getAllHTML = getHTMLPage()
-	
+
         dict_sentimentToStringObjects = createDictionaryOfSentStrings(sentencesWithSentiment)
         
         sentiments = sorted(dict_sentimentToStringObjects.keys())
@@ -570,6 +568,8 @@ def specificString(textString=""):
     mainSentiment = senty.polarity_scores(textString)['compound']
     if(mainSentiment == 0):
         print("{} \n No sentiment found in sentence".format(textString));
+        if(RUN_AS_MAIN):
+            RETURN_HTML_REPLACEMENT.append("{} \n No sentiment found in sentence".format(textString))
         return;
     print("\n {0}:{1}\n".format(textString,mainSentiment))   
     sentenceObj = Sentence(textString, mainSentiment)
@@ -577,6 +577,8 @@ def specificString(textString=""):
     replacementDictionary = sentenceObj.getDictOfIndexWords();
     if(len(replacementDictionary) <= 0):        
         print(" -- No new Strings generated ---\n\n")
+        if(RUN_AS_MAIN):
+            RETURN_HTML_REPLACEMENT.append(" -- No new Strings generated ---")
         return
     
     keysToChange = replacementDictionary.keys();
@@ -601,35 +603,60 @@ if (RUN_AS_MAIN):
 
 @app.route('/view-all')
 def routerViewAll():
-    numOfTweets = runThroughTweets()
-    return numOfTweets
+    htmlPageReturned = runThroughTweets()
+    return htmlPageReturned
 
-@app.route('/view-tweets/<start>/<number>')
+@app.route('/view-all/<int:start>/<int:number>')
 def routerViewTweets(start, number):
     global TWEET_START
     global NUM_OF_TWEETS 
+    oldStart = TWEET_START;
+    oldNum = NUM_OF_TWEETS;
 
     TWEET_START = start
     NUM_OF_TWEETS = number
     
-    numOfTweets = runThroughTweets()
-    return numOfTweets
+    htmlPageReturned = runThroughTweets()
+
+    TWEET_START = oldStart
+    NUM_OF_TWEETS = oldNum
+    
+
+    return htmlPageReturned
 
 @app.route('/user/<string:userString>')
 def userStringTest(userString):
-	allPossible =  specificString(userString)
-	return allPossible
+    allPossible =  specificString(userString)
+    result = []
+    obj = {}
+    return render_template("big_display.html", listOfObjs=result)
 
-@app.route('/test')
+@app.route('/user_entry')
 def userInteract():
-    return "oh no"
+    return '''
+    <html>
+    <body>
+
+        <h2>HTML Forms</h2>
+        <form action="/">
+        Last name:<br>
+        <input type="text" name="lastname" value="Mouse">
+        <br><br>
+        <input type="submit" value="Submit">
+        </form> 
+
+        <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
+
+        </body>
+    </html>
+
+    
+    '''
 
 @app.route('/')
 def introFunction():
-    return "Welcome to the web page for testing Sentimentally,\
-        Go to /view-all to see all possible tweets\
-        Still building up the functionality to test a particular string!"
+    return render_template("index.html")
 
 if(RUN_AS_MAIN):
     print("Going to now run the app!");
-    app.run(host=  '0.0.0.0', port=5000, debug=False)
+    app.run(host=  '0.0.0.0', port=5000, debug=True)

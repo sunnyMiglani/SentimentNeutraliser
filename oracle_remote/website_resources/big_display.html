@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>View Sample Tweets!</title>
+  </head>
+  <body>
+    <h1>
+      This is a page of sample tweets, it uses tweets from a dataset <br />
+      already available.
+    </h1>
+    <p>
+      To submit your own tweet please visit
+      <!-- <a href="{{ url_for('userInput') }}"> this page</a> -->
+    </p>
+    <div class="displayBlock">
+      {% for obj in listOfObjs%}
+      <div class="innerDisplayBlock">
+        <p><b> Original sentence: </b> {{ obj.original }}</p>
+        <br />
+        <ul>
+          {% for txt in obj.texts %}
+          <li>{{ txt }}</li>
+          {% endfor %}
+        </ul>
+        <br />
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>

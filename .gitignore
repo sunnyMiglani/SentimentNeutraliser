@@ -5,6 +5,6 @@ bc3_remote/
 thesis/
 */.ipynb_checkpoints/*
 ignored/
-*/__pycache__*
+*/__pycache__/*
 *.vscode/*
 */.vscode/*
