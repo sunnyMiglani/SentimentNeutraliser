@@ -2,13 +2,14 @@
 <html>
   <head>
     <title>
-      Welcome to user input page!
+      This is the user input page! Enter your text here
     </title>
   </head>
   <body>
-    <form action="/user/<string:userInput>"" method="get">
+    <h1> Please enter your string below. Suggestions will be on a new page!</h1>
+    <form action="/user/"" method="post">
       Input Text:
-      <input type="text" name="userText" value="Enter Text Here" />
+      <input type="text" name="userText" value="" />
     </form>
     <br/>
   </body>

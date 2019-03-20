@@ -19,7 +19,7 @@ import spacy
 import pickle
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_cors import CORS
 from IPython.display import HTML
 from nltk.corpus import wordnet 
@@ -98,7 +98,7 @@ nlp = spacy.load('en')
 
 NUMBER_OF_ALTERNATIVES = 5
 TWEET_START = 1
-NUM_OF_TWEETS = 30
+NUM_OF_TWEETS = 10
 
 
 # VERBOSE_PRINTING = True
@@ -175,14 +175,14 @@ def printStrings(sentenceObj):
                 if(PRINT_ALL_STRINGS and numberOfPrints <= SHOW_ALTS): displayText("{0}: {1}".format(htmlText,sentimentOfNewString),'red')
                 numberOfPrints+=1;
                 
-    if(numberOfPrints > SHOW_ALTS): print("--- More options (total: {0}) possible, but not printed ---".format(numberOfPrints));
+    if(numberOfPrints > SHOW_ALTS): print("--- More options (total: {0}) possible, but not printed: Change SHOW_ALTS ---".format(numberOfPrints));
     if (worstSentimentString != ""): displayText("Worst Sentence: {0} : {1}".format(worstSentimentString, worstSentiment), color='red')
     if (bestSentimentString != ""): displayText("Best Sentence: {0} : {1}".format(bestSentimentString, bestSentiment), color='green') 
     
     
     sentenceObj.resetFinalSentences();
     sentenceObj.addFinalSentences(listOfSentencesWithSentiments)
-    return listOfSentencesWithSentiments;
+    return listOfSentencesWithSentiments, sentenceObj;
 
 
 def getHTMLPage():
@@ -518,6 +518,7 @@ def runThroughTweets():
     tweets = extractTwitterDataset()
     if(RUN_AS_MAIN):
         global RETURN_HTML_REPLACEMENT;
+        listOfAllSentenceObjs = []
 
 
     counterOfTweets = 0;
@@ -545,16 +546,17 @@ def runThroughTweets():
             if(VERBOSE_PRINTING):print("{0}'th word's ({2}) options: {1}".format(key,replacementDictionary[key],tweetTokens[key]))
 
         sentenceObj = returnCombinationsOfStrings(sentenceObj)
-        sentencesWithSentiment = printStrings(sentenceObj)
+        sentencesWithSentiment, sentenceObj = printStrings(sentenceObj)
+        if(RUN_AS_MAIN):
+            listOfAllSentenceObjs.append(sentenceObj)
 
         dict_sentimentToStringObjects = createDictionaryOfSentStrings(sentencesWithSentiment)
         
         sentiments = sorted(dict_sentimentToStringObjects.keys())
         if(VERBOSE_PRINTING):print("sentiments:{0}".format(sentiments))
-
-    return getAllHTML;
-        
-    return counterOfTweets;
+    
+    return listOfAllSentenceObjs
+    # return counterOfTweets;
 
 
 # In[26]:
@@ -587,14 +589,15 @@ def specificString(textString=""):
             print("{0}'th word's options: {1}".format(key,replacementDictionary[key]))
         
     sentenceObj = returnCombinationsOfStrings(sentenceObj)
-    allPossibleSentences = printStrings(sentenceObj)
+    allPossibleSentences ,sentenceObj   = printStrings(sentenceObj)
     
     
     dict_sentimentToStringObjects = createDictionaryOfSentStrings(allPossibleSentences)    
 
     sentiments = sorted(dict_sentimentToStringObjects.keys())
     interactionWithUser(sentenceObj, dict_sentimentToStringObjects, sentiments[0:10], False);
-    return  allPossibleSentences
+    
+    return  sentenceObj
 
 
 if (RUN_AS_MAIN):
@@ -603,11 +606,12 @@ if (RUN_AS_MAIN):
 
 @app.route('/view-all')
 def routerViewAll():
-    htmlPageReturned = runThroughTweets()
-    return htmlPageReturned
+    allSentenceObjs = runThroughTweets()
+    return render_template("big_display.html", listOfObjs=allSentenceObjs)
 
 @app.route('/view-all/<int:start>/<int:number>')
 def routerViewTweets(start, number):
+   
     global TWEET_START
     global NUM_OF_TWEETS 
     oldStart = TWEET_START;
@@ -616,42 +620,29 @@ def routerViewTweets(start, number):
     TWEET_START = start
     NUM_OF_TWEETS = number
     
-    htmlPageReturned = runThroughTweets()
+    allSentenceObjs = runThroughTweets()
 
     TWEET_START = oldStart
     NUM_OF_TWEETS = oldNum
-    
+    print("Returned {0} number of objects".format(len(allSentenceObjs)))
 
-    return htmlPageReturned
+    return render_template("big_display.html", listOfObjs=allSentenceObjs)
+   
 
-@app.route('/user/<string:userString>')
-def userStringTest(userString):
-    allPossible =  specificString(userString)
-    result = []
-    obj = {}
-    return render_template("big_display.html", listOfObjs=result)
+
+@app.route('/user/', methods=['POST'])
+def userStringTest():
+    print("Received correcto string")
+    userString = request.form['userText']
+
+    print("User string was : " + str(userString))
+    stringObj =  specificString(userString)
+
+    return render_template("single_display.html", obj=stringObj)
 
 @app.route('/user_entry')
 def userInteract():
-    return '''
-    <html>
-    <body>
-
-        <h2>HTML Forms</h2>
-        <form action="/">
-        Last name:<br>
-        <input type="text" name="lastname" value="Mouse">
-        <br><br>
-        <input type="submit" value="Submit">
-        </form> 
-
-        <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
-
-        </body>
-    </html>
-
-    
-    '''
+    return render_template("user_page.html");
 
 @app.route('/')
 def introFunction():
@@ -659,4 +650,4 @@ def introFunction():
 
 if(RUN_AS_MAIN):
     print("Going to now run the app!");
-    app.run(host=  '0.0.0.0', port=5000, debug=True)
+    app.run(host=  '0.0.0.0', port=5000, debug=False)

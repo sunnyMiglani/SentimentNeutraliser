@@ -3,24 +3,33 @@
   <head>
     <title>View Sample Tweets!</title>
   </head>
+
   <body>
     <h1>
       This is a page of sample tweets, it uses tweets from a dataset <br />
       already available.
     </h1>
-    <p>
-      To submit your own tweet please visit
-      <!-- <a href="{{ url_for('userInput') }}"> this page</a> -->
-    </p>
     <div class="displayBlock">
       {% for obj in listOfObjs%}
       <div class="innerDisplayBlock">
-        <p><b> Original sentence: </b> {{ obj.original }}</p>
-        <br />
+        <p>
+          <b> Original sentence: </b> {{ obj.ogSentence }} . Original Sentiment
+          : {{ obj.ogSentiment }}
+        </p>
+        <p>Alternative sentences</p>
         <ul>
-          {% for txt in obj.texts %}
-          <li>{{ txt }}</li>
-          {% endfor %}
+          <!-- prettier-ignore -->
+          {% for txt in obj.finalShiftSentences %}
+          <!-- prettier-ignore -->
+          {% if txt.sentiment is gt(0) %}
+          <!-- prettier-ignore -->
+          <li  style="color:green">Sentence: {{ txt.html|safe }} - Sentiment: {{ txt.sentiment|safe }}</li>
+          <!-- prettier-ignore -->
+          {% else %}
+          <!-- prettier-ignore -->
+          <li style="color:red">Sentence: {{ txt.html|safe }} - Sentiment: {{ txt.sentiment|safe }}</li>
+          <!-- prettier-ignore -->
+          {% endif %} {% endfor %}
         </ul>
         <br />
       </div>
