@@ -4,6 +4,8 @@
     <title>
       This is the user input page! Enter your text here
     </title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
   </head>
   <body>
     <h1> Please enter your string below. Suggestions will be on a new page!</h1>
@@ -11,6 +13,15 @@
       Input Text:
       <input type="text" name="userText" value="" />
     </form>
+    <p>
+      If you want some examples, these are good ones to try
+      <ul>
+        <li> I really love hot coffee! But hate hot chocolate</li>
+        <li> I had such a great time yesterday! Have a happy day</li>
+        <li> Sadly I can't make the meeting tomorrow </li>
+
+      </ul>
+    </p>
     <br/>
   </body>
 </html>

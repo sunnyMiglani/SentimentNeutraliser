@@ -16,7 +16,7 @@ import string
 import nltk
 import sys
 import spacy
-import pickle
+import pickle #rick
 import os
 
 from flask import Flask, render_template, request
@@ -97,7 +97,7 @@ nlp = spacy.load('en')
 
 
 NUMBER_OF_ALTERNATIVES = 5
-TWEET_START = 1
+TWEET_START = 50
 NUM_OF_TWEETS = 10
 
 
@@ -174,7 +174,7 @@ def printStrings(sentenceObj):
             elif(sentimentOfNewString < mainSentiment and sentimentOfNewString != 0.0):
                 if(PRINT_ALL_STRINGS and numberOfPrints <= SHOW_ALTS): displayText("{0}: {1}".format(htmlText,sentimentOfNewString),'red')
                 numberOfPrints+=1;
-                
+
     if(numberOfPrints > SHOW_ALTS): print("--- More options (total: {0}) possible, but not printed: Change SHOW_ALTS ---".format(numberOfPrints));
     if (worstSentimentString != ""): displayText("Worst Sentence: {0} : {1}".format(worstSentimentString, worstSentiment), color='red')
     if (bestSentimentString != ""): displayText("Best Sentence: {0} : {1}".format(bestSentimentString, bestSentiment), color='green') 
@@ -638,15 +638,23 @@ def userStringTest():
     print("User string was : " + str(userString))
     stringObj =  specificString(userString)
 
+    if(stringObj == None):
+        return render_template("failed_page.html");
+
     return render_template("single_display.html", obj=stringObj)
 
 @app.route('/user_entry')
 def userInteract():
     return render_template("user_page.html");
 
+@app.route('/about')
+def aboutPage():
+    return render_template("about.html");
+
 @app.route('/')
 def introFunction():
     return render_template("index.html")
+
 
 if(RUN_AS_MAIN):
     print("Going to now run the app!");
