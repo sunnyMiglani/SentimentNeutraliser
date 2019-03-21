@@ -48,7 +48,7 @@ def expandWords(phrase):
     phrase = re.sub(r"can\'t", "can not", phrase)
     phrase = re.sub(r"n\'t", " not", phrase)
     phrase = re.sub(r"\'re", " are", phrase)
-    phrase = re.sub(r"\'s", " is", phrase)
+    phrase = re.sub(r"it\'s", "it is", phrase)
     phrase = re.sub(r"\'d", " would", phrase)
     phrase = re.sub(r"\'ll", " will", phrase)
     phrase = re.sub(r"\'t", " not", phrase)
@@ -64,6 +64,10 @@ def dataClean(tweet):
     # tweet = stemWords(tweet)
 
     return tweet
+
+
+# def __main__():
+#  print("")
 
 
 def interaction():
