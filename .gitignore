@@ -8,3 +8,4 @@ ignored/
 */__pycache__/*
 *.vscode/*
 */.vscode/*
+oracle_website/*
