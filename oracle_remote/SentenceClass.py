@@ -23,7 +23,7 @@ class SentenceWithHTML():
         
 class SentenceWithSentiment():
     
-    def __init__(self,sentence,sentiment, html="No HTML"):
+    def __init__(self, sentence, sentiment=-10 , html="No HTML"):
         self.sentence = sentence;
         self.sentiment = sentiment;
         self.html = html;
@@ -38,6 +38,8 @@ class SentenceWithSentiment():
         return self.html;
     
     def __str__(self):
+        if(self.sentiment==-10):
+            return "{0}".format(self.sentence)
         if(self.html == "No HTML"):
             return "{0} : {1}".format(self.sentence, self.sentiment)
         else:
@@ -60,7 +62,7 @@ class Sentence:
             sentence. (from cleanAndTokenizeText())
         '''
         if(self.indexToSetOfWords.get(index)):
-            self.indexToSetOfWords[index] = self.indexToSetOfWords.union(set(listOfAlternatives))
+            self.indexToSetOfWords[index] = self.indexToSetOfWords[index].union(set(listOfAlternatives))
         else:
             self.indexToSetOfWords[index] = set(listOfAlternatives)
     
