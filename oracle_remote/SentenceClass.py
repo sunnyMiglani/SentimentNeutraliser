@@ -51,7 +51,8 @@ class Sentence:
     def __init__(self, sentence, sentiment):
         self.ogSentence = sentence;
         self.ogSentiment = sentiment;
-        self.indexToSetOfWords = {}
+        self.indexToSetOfWords = {};
+        self.wordToAlternatives = {};
         self.finalShiftSentences = [];
         self.replacementsExist = False;
 
@@ -66,13 +67,25 @@ class Sentence:
         else:
             self.indexToSetOfWords[index] = set(listOfAlternatives)
     
+    def addWordToAlternatives(self, word, listOfAlternatives):
+        if(self.wordToAlternatives.get(word)):
+            self.wordToAlternatives[word] = self.wordToAlternatives[word].union(set(listOfAlternatives))
+        else:
+            self.wordToAlternatives[word] = set(listOfAlternatives)
+    
     
     def addFinalSentences(self, sentences):
         if(isinstance(sentences, str)):
             self.finalShiftSentences.append(sentences)
         else:
             self.finalShiftSentences.extend(sentences)
-
+    
+    def checkIfWordExists(self, word):
+        if(self.wordToAlternatives.get(word)):
+            return list(self.wordToAlternatives.get(word))
+        else:
+            return []
+            
     def resetFinalSentences(self):
         self.finalShiftSentences = [];
         
@@ -81,6 +94,9 @@ class Sentence:
     
     def getDictOfIndexWords(self):
         return copy.copy(dict(self.indexToSetOfWords))
+    
+    def getDictOfWordsToAlternatives(self):
+        return copy.copy(dict(self.wordToAlternatives))
             
 if(__name__ == "__main__"):
 	print("Running class file as main!");
