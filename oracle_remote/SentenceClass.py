@@ -2,9 +2,12 @@ import copy
 
 class SentenceWithHTML():
     
-    def __init__(self,sentence,html):
+    def __init__(self,sentence,html, sentiment=""):
         self.sentence = sentence;
         self.html = html;
+        if(sentiment!=""):
+            self.sentiment = sentiment;
+        
     
     def getHTML(self):
         return self.html;
@@ -18,6 +21,12 @@ class SentenceWithHTML():
     def setSentence(self, sentence):
         self.sentence = sentence
     
+    def setSentiment(self, sentiment):
+        self.sentiment = sentiment;
+       
+    def getSentiment(self):
+        return self.sentiment;
+    
     def __str__(self):
         return "sentence : {0}".format(self.sentence)
         
@@ -27,6 +36,7 @@ class SentenceWithSentiment():
         self.sentence = sentence;
         self.sentiment = sentiment;
         self.html = html;
+        self.sentenceTokens = []
       
     def getSentence(self):
         return self.sentence;
@@ -44,6 +54,13 @@ class SentenceWithSentiment():
             return "{0} : {1}".format(self.sentence, self.sentiment)
         else:
             return "{0} : {1}".format(self.html, self.sentiment)
+    
+    def getSentenceTokens(self):
+        return self.sentenceTokens[:]
+    
+    def setSentenceTokens(self, sentenceTokens):
+        self.sentenceTokens = sentenceTokens;
+        return
 
 class Sentence:
     
@@ -55,6 +72,7 @@ class Sentence:
         self.wordToAlternatives = {};
         self.finalShiftSentences = [];
         self.replacementsExist = False;
+        self.sentenceTokens = [];
 
     def addAlternativesByIndex(self, index, listOfAlternatives):
         '''
@@ -97,6 +115,14 @@ class Sentence:
     
     def getDictOfWordsToAlternatives(self):
         return copy.copy(dict(self.wordToAlternatives))
+    
+    def getSentenceTokens(self):
+        return self.sentenceTokens[:]
+    
+    def setSentenceTokens(self, sentenceTokens):
+        self.sentenceTokens = sentenceTokens;
+        return
+       
             
 if(__name__ == "__main__"):
 	print("Running class file as main!");
