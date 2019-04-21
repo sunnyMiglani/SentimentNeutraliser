@@ -5,7 +5,7 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
 ps = PorterStemmer()
-punctuation = r"\"#$%&'()+-/:;<=>?[\]^_`{|}~"
+punctuation = r"\"#$%&'()+-/:;<=>[\]^_`{|}~"
 
 
 def tokenize_words(tweet):
@@ -16,7 +16,7 @@ def tokenize_words(tweet):
 
 
 def removeTwitterData(tweet):
-    tweet = tweet.lower()
+    # tweet = tweet.lower()
     newTweet = ""
     for char in tweet:
         if char not in punctuation:
