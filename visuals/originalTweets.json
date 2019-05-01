@@ -1,0 +1,110 @@
+[
+  {
+    "TweetID": 1,
+    "Tweets": "sleep soon... i just hate saying bye and see you tomorrow for the night.",
+    "Normalised Valence": -0.775,
+    "Normalised Strength": 0.4,
+    "Valence": 1.725,
+    "Strength": 2.9,
+    "Sense-Score": 3.35
+  },
+  {
+    "TweetID": 2,
+    "Tweets": "just got ur newsletter those fares really are unbelievable shame i already booked and paid for mine",
+    "Normalised Valence": -0.05,
+    "Normalised Strength": 0.4,
+    "Valence": 2.45,
+    "Strength": 2.9,
+    "Sense-Score": 3.9
+  },
+  {
+    "TweetID": 3,
+    "Tweets": "damn... i do not have any chalk! my chalkboard is useless",
+    "Normalised Valence": -0.8,
+    "Normalised Strength": 0.9,
+    "Valence": 1.7,
+    "Strength": 3.4,
+    "Sense-Score": 3.65
+  },
+  {
+    "TweetID": 4,
+    "Tweets": "had a blast at the getty villa but hates that she is had a sore throat all day. it is just getting worse too",
+    "Normalised Valence": -0.125,
+    "Normalised Strength": 0.5,
+    "Valence": 2.375,
+    "Strength": 3,
+    "Sense-Score": 4.1
+  },
+  {
+    "TweetID": 5,
+    "Tweets": "hey missed ya at the meeting sup mama",
+    "Normalised Valence": 0.6,
+    "Normalised Strength": -0.2,
+    "Valence": 3.1,
+    "Strength": 2.3,
+    "Sense-Score": 3.95
+  },
+  {
+    "TweetID": 6,
+    "Tweets": "sorry babe!! my fam annoys me too. thankfully they are asleep right now. muahaha. *evil laugh*",
+    "Normalised Valence": 0.8,
+    "Normalised Strength": 1.1,
+    "Valence": 3.3,
+    "Strength": 3.6,
+    "Sense-Score": 3.65
+  },
+  {
+    "TweetID": 7,
+    "Tweets": "is strangely sad about lilo and samro breaking up.",
+    "Normalised Valence": -0.5,
+    "Normalised Strength": 0.5,
+    "Valence": 2,
+    "Strength": 3,
+    "Sense-Score": 2.9
+  },
+  {
+    "TweetID": 8,
+    "Tweets": "oh! i am so sorry i did not think about that before retweeting.",
+    "Normalised Valence": -0.5,
+    "Normalised Strength": 0.7,
+    "Valence": 2,
+    "Strength": 3.2,
+    "Sense-Score": 3.8
+  },
+  {
+    "TweetID": 9,
+    "Tweets": "broadband plan a massive broken promise via still waiting for broadband we are",
+    "Normalised Valence": -0.5,
+    "Normalised Strength": -0.5,
+    "Valence": 2,
+    "Strength": 2,
+    "Sense-Score": 2.9
+  },
+  {
+    "TweetID": 10,
+    "Tweets": "wow tons of replies from you may have to unfollow so i can see my friends tweets you are scrolling the feed a lot.",
+    "Normalised Valence": 1.1,
+    "Normalised Strength": 0.9,
+    "Valence": 3.6,
+    "Strength": 3.4,
+    "Sense-Score": 4.5
+  },
+  {
+    "TweetID": 11,
+    "Tweets": "put vacation photos online a few yrs ago. pc crashed and now i forget the name of the site.",
+    "Normalised Valence": -0.3,
+    "Normalised Strength": -0.5,
+    "Valence": 2.2,
+    "Strength": 2,
+    "Sense-Score": 3.9
+  },
+  {
+    "TweetID": 12,
+    "Tweets": "i need a hug",
+    "Normalised Valence": -0.7,
+    "Normalised Strength": 0.1,
+    "Valence": 1.8,
+    "Strength": 2.6,
+    "Sense-Score": 4.4
+  }
+]
