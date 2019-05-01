@@ -68,30 +68,24 @@ def getDifference(ogDataAll, bestDataAll, worstDataAll, fromNormalised=True):
         bestValence = bestData[ExtractValence]
         worstValence = worstData[ExtractValence]
 
-        # pos_val = bestValence - ogValence
-        # neg_val = ogValence - worstValence
-
         pos_val = ogValence - bestValence
         neg_val = worstValence - ogValence
-
-        positiveShiftsInValence.append(pos_val)
-        negativeShiftsInValence.append(neg_val)
 
         ogStrength = ogData[ExtractStrength]
         bestStrength = bestData[ExtractStrength]
         worstStrength = worstData[ExtractStrength]
 
-        # pos_str = bestStrength - ogStrength
-        # neg_str = ogStrength - worstStrength
-
         pos_str = ogStrength - bestStrength
         neg_str = worstStrength - ogStrength
+
+        if pos_val == 0 or neg_val == 0 or pos_str == 0 or neg_str == 0:
+            print("0 found, at {}".format(val))
 
         positiveShiftsInStrength.append(pos_str)
         negativeShiftsInStrength.append(neg_str)
 
-        if pos_val == 0 or neg_val == 0 or pos_str == 0 or neg_str == 0:
-            print("0 found, at {}".format(val))
+        positiveShiftsInValence.append(pos_val)
+        negativeShiftsInValence.append(neg_val)
 
     dictOfChanges = {}
     dictOfChanges["positive_valence"] = positiveShiftsInValence
@@ -182,6 +176,8 @@ def plotLinearRegressionAtDifferences(ogData, bestData, worstData):
     xs_neg = diff["negative_valence"]
     ys_neg = diff["negative_strength"]
 
+    rangeOfLabels = range(0, len(ogData.keys()))
+
     slope_pos, intercept_pos, r_value_pos, p_value_pos, std_err_pos = stats.linregress(
         xs_pos, ys_pos
     )
@@ -199,9 +195,16 @@ def plotLinearRegressionAtDifferences(ogData, bestData, worstData):
     plt.plot(
         xs_neg, ys_negForLine, "r", label="negativeLine", color="red", linewidth=1.0
     )
-    plt.title("Differences plotted")
+
+    for i, txt in enumerate(rangeOfLabels):
+        plt.annotate(txt, (xs_pos[i], ys_pos[i]))
+        plt.annotate(txt, (xs_neg[i], ys_neg[i]))
+
     plt.hlines(0.0, -2.5, 2.5, linestyles="dashed")
     plt.vlines(0.0, -2.5, 2.5, linestyles="dashed")
+    plt.title("Trends in Differences Plotted")
+    plt.xlabel("Valence")
+    plt.ylabel("Arousal or Strength")
     plt.legend()
     plt.show()
 
@@ -271,7 +274,8 @@ def displayOnlyStrength(ogData, bestData, worstData):
         plt.annotate(txt, (bestStr[i], i))
         plt.annotate(txt, (worstStr[i], i))
     plt.xlabel("Strength")
-    plt.title("only stregnth")
+    plt.title("Only Strength")
+    plt.ylabel("Sentences groups")
     plt.show()
 
     return
@@ -298,6 +302,7 @@ def displayOnlyValence(ogData, bestData, worstData):
         plt.annotate(txt, (worstVal[i], i))
     plt.xlabel("Valence")
     plt.title("Only valence displayed")
+    plt.ylabel("Different Sentence Groups")
     plt.show()
 
     return
