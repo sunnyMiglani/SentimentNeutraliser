@@ -106,17 +106,17 @@ def display2DAbsolute(ogTweets, bestTweets, worstTweets):
 
     sizeVal = 15
     plt.figure(1)
-    plt.scatter(ogVal, ogStr, label="original", color="blue", s=sizeVal)
-    plt.scatter(bestVal, bestStr, label="best", color="green", s=sizeVal)
-    plt.scatter(worstVal, worstStr, label="worst", color="red", s=sizeVal)
+    plt.scatter(ogVal, ogStr, label="original", color="blue", s=sizeVal, marker="o")
+    plt.scatter(bestVal, bestStr, label="best", color="green", s=sizeVal, marker="x")
+    plt.scatter(worstVal, worstStr, label="worst", color="red", s=sizeVal, marker="s")
 
     for i, txt in enumerate(rangeOfLabels):
         plt.annotate("{0}".format(txt), (ogVal[i], ogStr[i]))
         plt.annotate("{0}".format(txt), (bestVal[i], bestStr[i]))
         plt.annotate("{0}".format(txt), (worstVal[i], worstStr[i]))
-
-    plt.hlines(0.0, -2.5, 2.5, linestyles="dashed")
-    plt.vlines(0.0, -2.5, 2.5, linestyles="dashed")
+        plt.plot([], [], " ", label="{0} = Sentence {0}".format(txt))
+    plt.hlines(0.0, -2.0, 2.0, linestyles="dashed")
+    plt.vlines(0.0, -2.0, 2.0, linestyles="dashed")
     plt.xticks(rangeOfValenceValues)
     plt.yticks(rangeOfStrengthValues)
     plt.ylabel("Strength/Arousal")
@@ -182,7 +182,7 @@ def plotLinearRegressionAtDifferences(ogData, bestData, worstData):
         xs_pos, ys_pos
     )
     ys_posForLine = [intercept_pos + (slope_pos * val) for val in xs_pos]
-    plt.scatter(xs_pos, ys_pos, color="blue", label="positiveChangesFromOG")
+    plt.scatter(xs_pos, ys_pos, color="blue", label="Positive Shift")
     plt.plot(
         xs_pos, ys_posForLine, "r", label="positiveLine", color="blue", linewidth=1.0
     )
@@ -191,7 +191,7 @@ def plotLinearRegressionAtDifferences(ogData, bestData, worstData):
         xs_neg, ys_neg
     )
     ys_negForLine = [intercept_neg + (slope_neg * val) for val in xs_neg]
-    plt.scatter(xs_neg, ys_neg, color="red", label="negativeChangesFromOG")
+    plt.scatter(xs_neg, ys_neg, color="red", label="Negative Shift")
     plt.plot(
         xs_neg, ys_negForLine, "r", label="negativeLine", color="red", linewidth=1.0
     )
