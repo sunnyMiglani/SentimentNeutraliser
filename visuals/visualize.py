@@ -42,6 +42,11 @@ def getTweetValenceAndStrength(jsonData):
         valence = data["Normalised Valence"]
         listOfValence.append(valence)
         listOfStrength.append(strength)
+        # print(
+        #     "tweetID: {0}, index:{1}, tweet:{2} valence:{3}, str:{4}".format(
+        #         tweetId, ind, data["Tweets"], valence, strength
+        #     )
+        # )
     return listOfValence, listOfStrength
 
 
@@ -68,15 +73,15 @@ def getDifference(ogDataAll, bestDataAll, worstDataAll, fromNormalised=True):
         bestValence = bestData[ExtractValence]
         worstValence = worstData[ExtractValence]
 
-        pos_val = ogValence - bestValence
-        neg_val = worstValence - ogValence
+        pos_val = bestValence - ogValence
+        neg_val = ogValence - worstValence
 
         ogStrength = ogData[ExtractStrength]
         bestStrength = bestData[ExtractStrength]
         worstStrength = worstData[ExtractStrength]
 
-        pos_str = ogStrength - bestStrength
-        neg_str = worstStrength - ogStrength
+        pos_str = bestStrength - ogStrength
+        neg_str = ogStrength - worstStrength
 
         if pos_val == 0 or neg_val == 0 or pos_str == 0 or neg_str == 0:
             print("0 found, at {}".format(val))
@@ -182,7 +187,7 @@ def plotLinearRegressionAtDifferences(ogData, bestData, worstData):
         xs_pos, ys_pos
     )
     ys_posForLine = [intercept_pos + (slope_pos * val) for val in xs_pos]
-    plt.scatter(xs_pos, ys_pos, color="blue", label="Positive Shift")
+    plt.scatter(xs_pos, ys_pos, color="blue", label="Positive Shift", marker="o")
     plt.plot(
         xs_pos, ys_posForLine, "r", label="positiveLine", color="blue", linewidth=1.0
     )
@@ -191,7 +196,7 @@ def plotLinearRegressionAtDifferences(ogData, bestData, worstData):
         xs_neg, ys_neg
     )
     ys_negForLine = [intercept_neg + (slope_neg * val) for val in xs_neg]
-    plt.scatter(xs_neg, ys_neg, color="red", label="Negative Shift")
+    plt.scatter(xs_neg, ys_neg, color="red", label="Negative Shift", marker="x")
     plt.plot(
         xs_neg, ys_negForLine, "r", label="negativeLine", color="red", linewidth=1.0
     )
@@ -200,8 +205,8 @@ def plotLinearRegressionAtDifferences(ogData, bestData, worstData):
         plt.annotate(txt, (xs_pos[i], ys_pos[i]))
         plt.annotate(txt, (xs_neg[i], ys_neg[i]))
 
-    plt.hlines(0.0, -2.5, 2.5, linestyles="dashed")
-    plt.vlines(0.0, -2.5, 2.5, linestyles="dashed")
+    plt.hlines(0.0, -2.0, 2.0, linestyles="dashed")
+    plt.vlines(0.0, -2.0, 2.0, linestyles="dashed")
     plt.title("Trends in Differences Plotted")
     plt.xlabel("Valence")
     plt.ylabel("Arousal or Strength")
@@ -256,53 +261,55 @@ def linearRegressionLines(data):
 
 
 def displayOnlyStrength(ogData, bestData, worstData):
-    _, ogStr = getTweetValenceAndStrength(ogData)
+    _, originalStrength = getTweetValenceAndStrength(ogData)
     _, bestStr = getTweetValenceAndStrength(bestData)
     _, worstStr = getTweetValenceAndStrength(worstData)
     zerosList = [0] * len(ogData.keys())
 
     for i in range(0, len(zerosList)):
-        plt.scatter(ogStr[i], [i], label="Original Sentence Score", color="blue")
-        plt.scatter(
-            bestStr[i], [i], label="Best Sentiment-Score-From-Comp", color="green"
-        )
-        plt.scatter(
-            worstStr[i], [i], label="Worst Sentiment-Score-From-Comp", color="red"
-        )
+        plt.scatter(originalStrength[i], [i], color="blue", marker="o")
+        plt.scatter(bestStr[i], [i], color="green", marker="x")
+        plt.scatter(worstStr[i], [i], color="red", marker="s")
     for i, txt in enumerate(range(0, len(ogData.keys()))):
-        plt.annotate(txt, (ogStr[i], i))
+        plt.annotate(txt, (originalStrength[i], i))
         plt.annotate(txt, (bestStr[i], i))
         plt.annotate(txt, (worstStr[i], i))
+    plt.plot([], [], label="Original Sentence", marker="o", color="blue")
+    plt.plot([], [], label="Best Sentence", marker="x", color="green")
+    plt.plot([], [], label="Worst Sentence", marker="s", color="red")
+    plt.hlines(4.0, -2.5, 2.5, linestyles="dashed")
     plt.xlabel("Strength")
     plt.title("Only Strength")
     plt.ylabel("Sentences groups")
+    plt.legend()
     plt.show()
 
     return
 
 
 def displayOnlyValence(ogData, bestData, worstData):
-    ogVal, _ = getTweetValenceAndStrength(ogData)
+    originalValence, _ = getTweetValenceAndStrength(ogData)
     bestVal, _ = getTweetValenceAndStrength(bestData)
     worstVal, _ = getTweetValenceAndStrength(worstData)
     zerosList = [0] * len(ogData.keys())
 
     for i in range(0, len(zerosList)):
-        plt.scatter(ogVal[i], [i], label="Original Sentence", color="blue")
-        plt.scatter(
-            bestVal[i], [i], label="Best Sentiment-Score-From-Comp", color="green"
-        )
-        plt.scatter(
-            worstVal[i], [i], label="Worst Sentiment-Score-From-Comp", color="red"
-        )
+        plt.scatter(originalValence[i], [i], color="blue", marker="o")
+        plt.scatter(bestVal[i], [i], color="green", marker="x")
+        plt.scatter(worstVal[i], [i], color="red", marker="s")
 
     for i, txt in enumerate(range(0, len(ogData.keys()))):
-        plt.annotate(txt, (ogVal[i], i))
+        plt.annotate(txt, (originalValence[i], i))
         plt.annotate(txt, (bestVal[i], i))
         plt.annotate(txt, (worstVal[i], i))
+    plt.plot([], [], label="Original Sentence", marker="o", color="blue")
+    plt.plot([], [], label="Best Sentence", marker="x", color="green")
+    plt.plot([], [], label="Worst Sentence", marker="s", color="red")
+    plt.hlines(4.0, -2.5, 2.5, linestyles="dashed")
     plt.xlabel("Valence")
     plt.title("Only valence displayed")
     plt.ylabel("Different Sentence Groups")
+    plt.legend()
     plt.show()
 
     return
@@ -313,7 +320,7 @@ bestTweets = cleanData(readData("bestTweets"))
 worstTweets = cleanData(readData("worstTweets"))
 
 
-display2DAbsolute(ogTweets, bestTweets, worstTweets)
+# display2DAbsolute(ogTweets, bestTweets, worstTweets)
 
 # diff = getDifference(ogTweets, bestTweets, worstTweets)
 # display2DRelative(
@@ -324,8 +331,8 @@ display2DAbsolute(ogTweets, bestTweets, worstTweets)
 # )
 
 
-# displayOnlyValence(ogTweets, bestTweets, worstTweets)
-# displayOnlyStrength(ogTweets, bestTweets, worstTweets)
+displayOnlyValence(ogTweets, bestTweets, worstTweets)
+displayOnlyStrength(ogTweets, bestTweets, worstTweets)
 
 # plotLinearRegressionLines(ogTweets, bestTweets, worstTweets)
-plotLinearRegressionAtDifferences(ogTweets, bestTweets, worstTweets)
+# plotLinearRegressionAtDifferences(ogTweets, bestTweets, worstTweets)
