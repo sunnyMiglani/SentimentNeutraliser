@@ -6,7 +6,7 @@ import numpy as np
 from scipy import stats
 from sklearn.linear_model import LinearRegression
 
-SENSE_SCORE_THRESHOLD = 3.40
+SENSE_SCORE_THRESHOLD = 3.55
 
 
 def readData(fileName):
@@ -22,7 +22,7 @@ def readData(fileName):
 def cleanData(jsonData):
     finalData = {}
     for data in jsonData:
-        if data["Sense-Score"] < SENSE_SCORE_THRESHOLD:
+        if data["Sense-Score"] < SENSE_SCORE_THRESHOLD or data["TweetID"] == "6":
             continue
         else:
             finalData[data["TweetID"]] = data
@@ -91,6 +91,11 @@ def getDifference(ogDataAll, bestDataAll, worstDataAll, fromNormalised=True):
 
         positiveShiftsInValence.append(pos_val)
         negativeShiftsInValence.append(neg_val)
+        # print(
+        #     "id:{0}\npositiveValence:{1}\nnegativeValence:{2}\npositiveStrength:{3}\nnegativeStrength:{4}\n".format(
+        #         val, pos_val, neg_val, pos_str, neg_str
+        #     )
+        # )
 
     dictOfChanges = {}
     dictOfChanges["positive_valence"] = positiveShiftsInValence
@@ -322,7 +327,7 @@ worstTweets = cleanData(readData("worstTweets"))
 
 # display2DAbsolute(ogTweets, bestTweets, worstTweets)
 
-# diff = getDifference(ogTweets, bestTweets, worstTweets)
+diff = getDifference(ogTweets, bestTweets, worstTweets)
 # display2DRelative(
 #     diff["positive_valence"],
 #     diff["negative_valence"],
@@ -331,8 +336,8 @@ worstTweets = cleanData(readData("worstTweets"))
 # )
 
 
-displayOnlyValence(ogTweets, bestTweets, worstTweets)
-displayOnlyStrength(ogTweets, bestTweets, worstTweets)
+# displayOnlyValence(ogTweets, bestTweets, worstTweets)
+# displayOnlyStrength(ogTweets, bestTweets, worstTweets)
 
 # plotLinearRegressionLines(ogTweets, bestTweets, worstTweets)
-# plotLinearRegressionAtDifferences(ogTweets, bestTweets, worstTweets)
+plotLinearRegressionAtDifferences(ogTweets, bestTweets, worstTweets)
